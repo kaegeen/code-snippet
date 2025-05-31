@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindWeather</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
+
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full space-y-4">
+    <h1 class="text-xl font-bold text-center">MindWeather</h1>
+
+    <div class="grid grid-cols-3 gap-3 text-center text-sm">
+      <button onclick="logMood('Clear')" class="bg-blue-100 py-2 rounded hover:bg-blue-200">Clear</button>
+      <button onclick="logMood('Cloudy')" class="bg-gray-200 py-2 rounded hover:bg-gray-300">Cloudy</button>
+      <button onclick="logMood('Stormy')" class="bg-red-200 py-2 rounded hover:bg-red-300">Stormy</button>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-sm mb-2">Today’s Log</h2>
+      <ul id="moodList" class="text-sm text-gray-700 space-y-1 pl-4 list-disc"></ul>
+    </div>
+  </div>
+
+  <script>
+    const moodList = document.getElementById("moodList");
+
+    function logMood(mood) {
+      const time = new Date().toLocaleTimeString();
+      const entry = `${time} - Mood: ${mood}`;
+      const li = document.createElement("li");
+      li.textContent = entry;
+      moodList.prepend(li);
+
+      const logs = JSON.parse(localStorage.getItem("moods")) || [];
+      logs.unshift(entry);
+      localStorage.setItem("moods", JSON.stringify(logs));
+    }
+
+    // Load saved moods
+    (function loadMoods() {
+      const logs = JSON.parse(localStorage.getItem("moods")) || [];
+      logs.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        moodList.appendChild(li);
+      });
+    })();
+  </script>
+
+</body>
+</html>
